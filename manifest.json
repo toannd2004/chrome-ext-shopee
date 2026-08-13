@@ -1,0 +1,63 @@
+{
+  "manifest_version": 3,
+  "name": "Ext-Shopee",
+  "version": "1.0.0",
+  "description": "Shopee toolbox: Top10 sản phẩm bán chạy + Ảnh sản phẩm lên Drive + Affiliate link",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvNPkPstmnLZHPRB0hBqVBWeo2K8vBWFgF1MqqFrOCYqKi1GvKLpNhCJoNpxpRnOQDJYsMqvwKhBkUMpYYNArJhFCHBGyDMnzZJyKqYqLmOvfUvJHGwFZxBnJHpTQqYzgHjBtQkQMzYGOfOBrRAAaFZLLqBMPKHBsSXGlKFGWNVJxRxMzCVDCGzHzHwQFxLMgiGHpRqKcXoGeDIjNknAURFgKHGcKhKhHSZqFQdWNyGxEgQGcKjUJRiMCQKYKGtYMRDYPIoMLYLKSFwIDAQAB",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_title": "Ext-Shopee"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": [
+    "storage",
+    "sidePanel",
+    "tabs",
+    "scripting",
+    "downloads",
+    "identity",
+    "clipboardWrite"
+  ],
+  "host_permissions": [
+    "https://shopee.vn/*",
+    "https://*.shopee.vn/*",
+    "https://sheets.googleapis.com/*",
+    "https://www.googleapis.com/*",
+    "https://accounts.google.com/*",
+    "https://*.susercontent.com/*",
+    "https://affiliate.shopee.vn/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["*://shopee.vn/search*"],
+      "js": ["inject.js"],
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
+    {
+      "matches": ["*://shopee.vn/search*"],
+      "js": ["dom.js"],
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
+    {
+      "matches": ["*://shopee.vn/*"],
+      "js": ["relay.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["*://shopee.vn/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

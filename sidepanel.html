@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="sidepanel.css">
+</head>
+<body>
+<div id="app">
+  <!-- Header -->
+  <div id="header">
+    <span id="logo">🛒 Ext-Shopee</span>
+  </div>
+
+  <!-- Tab bar -->
+  <div id="tab-bar">
+    <button class="tab-btn active" data-tab="tab1">🛒 Top10</button>
+    <button class="tab-btn" data-tab="tab2">📸 Ảnh & Drive</button>
+    <button class="tab-btn" data-tab="tab3">⚙ Cấu hình</button>
+  </div>
+
+  <!-- ==================== TAB 1: Top10 ==================== -->
+  <div id="tab1" class="tab-content active">
+    <!-- Feature tabs -->
+    <div id="feature-tabs"></div>
+
+    <!-- Mode + Input -->
+    <div id="toolbar">
+      <div id="mode-row">
+        <label class="radio"><input type="radio" name="mode" value="select" checked> Chọn SP</label>
+        <label class="radio"><input type="radio" name="mode" value="all"> All</label>
+      </div>
+      <div id="input-row">
+        <input id="keyword" type="text" placeholder="Nhập từ khoá...">
+        <button id="btn-scan" class="primary">🔍 Quét</button>
+      </div>
+    </div>
+
+    <!-- Actions row -->
+    <div id="actions">
+      <button id="btn-select-sp" class="sec">🔍 Chọn SP</button>
+      <button id="btn-clear-all" class="danger">🗑 Xoá hết</button>
+      <button id="btn-reset" class="warn">🔄 Reset</button>
+    </div>
+
+    <!-- Status -->
+    <div id="status"></div>
+
+    <!-- Product list -->
+    <div id="list"></div>
+
+    <!-- Debug log -->
+    <details id="debug-details">
+      <summary>🐞 Debug log</summary>
+      <pre id="debug-log"></pre>
+    </details>
+
+    <!-- Footer -->
+    <div id="footer">
+      <button id="btn-copy-raw" class="sec">📋 Copy Raw JSON</button>
+      <button id="btn-save-sheet" class="primary">📤 Lưu Google Sheet</button>
+    </div>
+    <div id="sheet-link"><a id="sheet-link-a" href="#" target="_blank">📄 Mở file Google Sheet</a></div>
+  </div>
+
+  <!-- ==================== TAB 2: Ảnh & Drive ==================== -->
+  <div id="tab2" class="tab-content">
+    <div id="tab2-idle">
+      <p class="hint">📸 Mở một trang sản phẩm Shopee, sau đó bấm nút bên dưới để trích xuất ảnh.</p>
+      <button id="btn-extract" class="primary">🔍 Trích xuất ảnh</button>
+      <div id="tab2-extract-status"></div>
+    </div>
+
+    <div id="tab2-result" style="display:none">
+      <div id="tab2-info">
+        <strong id="tab2-name"></strong>
+        <span id="tab2-count"></span>
+      </div>
+      <button id="btn-upload-drive" class="primary">📤 Upload lên Drive</button>
+      <button id="btn-upload-new" class="primary" style="display:none">📤 Upload mới</button>
+      <button id="btn-force-update" class="warn" style="display:none">🔄 Cập nhật ảnh</button>
+
+      <div id="tab2-upload-progress" style="display:none">
+        <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+        <span id="progress-text"></span>
+      </div>
+
+      <div id="tab2-drive-result" style="display:none">
+        <div id="tab2-folder-link">
+          📁 <a id="tab2-folder-a" href="#" target="_blank">Mở folder Drive</a>
+          <button class="copy-btn sm" data-copy="folder">📋</button>
+        </div>
+        <div id="tab2-file-list"></div>
+        <div id="tab2-actions">
+          <button id="btn-copy-all" class="sec">📋 Copy All Links</button>
+        </div>
+      </div>
+
+      <div id="tab2-affiliate">
+        <button id="btn-affiliate" class="sec">🔗 Lấy link Affiliate</button>
+        <div id="tab2-affiliate-result" style="display:none">
+          <span id="tab2-aff-link"></span>
+          <button class="copy-btn sm" data-copy="aff">📋</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TAB 3: Cấu hình ==================== -->
+  <div id="tab3" class="tab-content">
+    <div class="config-section">
+      <h3>🔐 Google OAuth</h3>
+      <label>Client ID</label>
+      <input id="cfg-client-id" type="text" placeholder="174199013226-qsf3nkm8b278k805hb0qvckr61d026qo.apps.googleusercontent.com">
+      <p class="hint">Tạo Web Application OAuth Client tại <a href="https://console.cloud.google.com" target="_blank">Google Cloud Console</a>. Redirect URI: <code id="cfg-redirect-uri"></code></p>
+      <div id="cfg-auth-buttons">
+        <button id="btn-login" class="primary">🔑 Đăng nhập Google</button>
+        <button id="btn-logout" class="danger" style="display:none">🚪 Đăng xuất</button>
+      </div>
+      <div id="cfg-auth-status"></div>
+    </div>
+
+    <div class="config-section">
+      <h3>📊 Tab 1 — Google Sheet (Top10)</h3>
+      <label>Tên file Google Sheets</label>
+      <input id="cfg-sheet1-name" type="text" placeholder="shopee_top10">
+      <p class="hint">Để trống = dùng "shopee_top10". Tự tìm file cũ hoặc tạo mới.</p>
+    </div>
+
+    <div class="config-section">
+      <h3>📸 Tab 2 — Google Sheet (Ảnh)</h3>
+      <label>Tên file Google Sheets</label>
+      <input id="cfg-sheet2-name" type="text" placeholder="shopee_images">
+      <p class="hint">Để trống = dùng "shopee_images". Lưu log ảnh đã upload.</p>
+
+      <label>Tên thư mục Drive gốc</label>
+      <input id="cfg-drive-root" type="text" placeholder="shopee-products">
+      <p class="hint">Thư mục gốc trên Drive để chứa ảnh sản phẩm.</p>
+    </div>
+
+    <div id="cfg-footer">
+      <button id="btn-save-config" class="primary">💾 Lưu cấu hình</button>
+    </div>
+  </div>
+</div>
+
+<script src="features.js"></script>
+<script src="lib/sheet.js"></script>
+<script src="lib/drive.js"></script>
+<script src="sidepanel.js"></script>
+</body>
+</html>
